@@ -1,2 +1,226 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Netlist Studio</title><link>http://testserver/articles/</link><description>Innovative consumer products, open source hardware, tools for manufacturing, and more.</description><atom:link href="http://testserver/feed.xml" rel="self"/><language>en-us</language><lastBuildDate>Wed, 25 Feb 2026 17:55:25 +0000</lastBuildDate><item><title>Claude + KiCad</title><link>http://testserver/articles/2026/02/25/claude-kicad/</link><description>Claude + KiCad experiments</description><pubDate>Wed, 25 Feb 2026 17:55:25 +0000</pubDate><guid>http://testserver/articles/2026/02/25/claude-kicad/</guid></item><item><title>Claude + Oscilloscope</title><link>http://testserver/articles/2026/02/23/claude-oscilloscope/</link><description>What happens when you combine Claude with an oscilloscope?</description><pubDate>Mon, 23 Feb 2026 21:10:54 +0000</pubDate><guid>http://testserver/articles/2026/02/23/claude-oscilloscope/</guid></item><item><title>DUT Hub: Automating Hardware Testing with MicroPython</title><link>http://testserver/articles/2026/02/18/dut-hub-micropython-support/</link><description>MicroPython support + a prototype test jig for semi-automatic testing</description><pubDate>Wed, 18 Feb 2026 20:28:43 +0000</pubDate><guid>http://testserver/articles/2026/02/18/dut-hub-micropython-support/</guid></item><item><title>DUT Hub: A Prototype Test Jig Controller (V0.1)</title><link>http://testserver/articles/2026/02/12/dut-hub-prototype-test-jig-v0-1/</link><description>The DUT Hub is a 4-channel, open-source automated PCB test platform</description><pubDate>Thu, 12 Feb 2026 06:51:25 +0000</pubDate><guid>http://testserver/articles/2026/02/12/dut-hub-prototype-test-jig-v0-1/</guid></item></channel></rss>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel xmlns:media="http://search.yahoo.com/mrss/"><title>Netlist Studio</title><link>http://testserver/articles/</link><description>Innovative consumer products, open source hardware, tools for manufacturing, and more.</description><atom:link href="http://testserver/feed.xml" rel="self"/><language>en-us</language><lastBuildDate>Wed, 25 Feb 2026 17:55:25 +0000</lastBuildDate><item><title>Claude + KiCad</title><link>http://testserver/articles/2026/02/25/claude-kicad/</link><description>&lt;p&gt;&lt;img src="https://storage.googleapis.com/netliststudio_static//img/articles/claude_plus_kicad.png" alt="Claude + KiCad" style="max-width:100%;"&gt;&lt;/p&gt;&lt;p&gt;Claude + KiCad experiments&lt;/p&gt;&lt;hr&gt;&lt;p&gt;After building the MCP server for the Keysight Oscilloscope, I thought it would be fun to experiment with giving Claude access to a KiCad PCB.&lt;/p&gt;
+&lt;h3&gt;KiCad 9 API&lt;/h3&gt;
+&lt;p&gt;KiCad Version 9 introduced a new socket-based API for controlling PCB design elements. It is designed to be more stable and better supported than the legacy Python based API, with schematic control planned for future releases. For an MCP server, this is the perfect interface.&lt;/p&gt;
+&lt;h3&gt;The Goal&lt;/h3&gt;
+&lt;p&gt;KiCad has a rich plugin ecosystem, but I frequently encounter repetitive tasks that are too small to justify writing a dedicated script, but  too tedious to do manually.  I wanted to see if I could use a Claude prompt to handle those quick tasks like strange layout patterns or board audits that are too small to automate with a dedicated script.&lt;/p&gt;
+&lt;h3&gt;The Test:&lt;/h3&gt;
+&lt;p&gt;I created a board with 64 LEDs and asked Claude to arrange them in two concentric circles. The agent had to:&lt;br /&gt;
+1. &lt;strong&gt;Analyze the board:&lt;/strong&gt; Retrieve the &lt;code&gt;Edge.Cuts&lt;/code&gt; geometry and identify all LED footprints.&lt;br /&gt;
+2. &lt;strong&gt;Calculate the geometry:&lt;/strong&gt; Determine the polar coordinates for two rings.&lt;br /&gt;
+3. &lt;strong&gt;Execute the layout:&lt;/strong&gt; Batch move the footprints into their final positions.&lt;/p&gt;
+&lt;p&gt;Note: While KiCad 9 can do this via the &lt;a href="https://docs.kicad.org/master/en/pcbnew/pcbnew.html#creating-arrays"&gt;GUI Array Tool&lt;/a&gt;, the goal was to see how it handle a simple test.&lt;/p&gt;
+&lt;h3&gt;The Result&lt;/h3&gt;
+&lt;p&gt;The result was correct, but the execution took about two minutes, which is a bit slower than I’d like. The bottleneck seems to be the planning phase where Claude interprets the layout. &lt;/p&gt;
+&lt;p&gt;I found that for complex tasks, it’s better to ask Claude to write a Python script for the API rather than performing individual actions. It seems tobe more reliable at executing complex math within a script than trying to "think" through coordinates behind the scenes.&lt;/p&gt;
+&lt;p&gt;Overall, while the Oscilloscope MCP feels it will be more useful in my workflow, I could see KiCad integration helpful for one-off tasks where you're too lazy to make a script.&lt;/p&gt;
+&lt;h3&gt;The MCP Server&lt;/h3&gt;
+&lt;p&gt;Here are the commands the tool supports:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Tool&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;ping&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Check KiCad connectivity&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;get_version&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Get KiCad version string&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;get_board_info&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Summary of footprints, tracks, vias, nets, and zones&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;get_footprints&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;List footprints with position, layer, and value&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;get_nets&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;List all nets by name and code&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;get_tracks&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;List all copper track segments&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;get_vias&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;List all vias&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;get_zones&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;List all copper zones&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;get_board_outline&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Return the Edge.Cuts geometry&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;get_component_connections&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Show net connectivity and shared neighbors&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;move_footprint&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Move a footprint to an absolute position&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;rotate_footprint&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Set absolute rotation in degrees&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;batch_move_footprints&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Move multiple footprints in one undo step&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;create_track&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Add a copper track segment to a named net&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;remove_items_by_id&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Remove board items by ID&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;refill_zones&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Refill all copper zones&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;save_board&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Save the board to disk&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h4&gt;A Note on Token Usage&lt;/h4&gt;
+&lt;p&gt;Commands  like &lt;code&gt;get_component_connections&lt;/code&gt; can use &lt;strong&gt;a lot&lt;/strong&gt; of tokens on even simple  boards. To keep things efficient, use the &lt;code&gt;reference_filter&lt;/code&gt; to narrow your scope and rely on &lt;code&gt;get_board_info&lt;/code&gt; for high level summaries.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Github:&lt;/strong&gt; &lt;a href="https://github.com/Netlist-Studio/kicad-mcp"&gt;https://github.com/Netlist-Studio/kicad-mcp&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Demo&lt;/strong&gt; &lt;a href="https://www.youtube.com/shorts/931JnJHDEdY"&gt;https://www.youtube.com/shorts/931JnJHDEdY&lt;/a&gt;&lt;/p&gt;</description><pubDate>Wed, 25 Feb 2026 17:55:25 +0000</pubDate><guid>http://testserver/articles/2026/02/25/claude-kicad/</guid><media:content medium="image" url="https://storage.googleapis.com/netliststudio_static//img/articles/thumbs/claude_plus_kicad.png"/></item><item><title>Claude + Oscilloscope</title><link>http://testserver/articles/2026/02/23/claude-oscilloscope/</link><description>&lt;p&gt;&lt;img src="https://storage.googleapis.com/netliststudio_static//img/articles/claude_plus_scope.png" alt="Claude + Oscilloscope" style="max-width:100%;"&gt;&lt;/p&gt;&lt;p&gt;What happens when you combine Claude with an oscilloscope?&lt;/p&gt;&lt;hr&gt;&lt;p&gt;I thought it would be a fun experiment to see what Claude would be capable of if I gave it control of my oscilloscope. Maybe it could save time by automatically verifying changes or recording results. To do this, I (and Claude) created an &lt;a href="https://modelcontextprotocol.io/docs/getting-started/intro"&gt;MCP&lt;/a&gt; server that uses &lt;a href="https://pyvisa.readthedocs.io/en/latest"&gt;PyVISA&lt;/a&gt; to control the scope.&lt;/p&gt;
+&lt;p&gt;Some examples I tried were asking Claude to verify if I2C was functional after porting MicroPython to the DUT Hub. Or checking if PWM frequency was correct. These aren't particularly difficult tasks to do manually, but it is pretty fun to watch it write the code, setup the scope and fix any issues in less than a minute or two.  &lt;/p&gt;
+&lt;h3&gt;Scope Control via MCP&lt;/h3&gt;
+&lt;p&gt;The integration works by exposing a set of tools to Claude that map to standard SCPI commands. This allows the agent to treat the oscilloscope like any other API. Here are the current supported commands.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Tool&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;scope_idn&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Identify the scope&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;scope_autoscale&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Auto-configure all channels and timebase&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;scope_run&lt;/code&gt; / &lt;code&gt;scope_stop&lt;/code&gt; / &lt;code&gt;scope_single&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Acquisition control&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;scope_set_timebase&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Set time/div and delay&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;scope_set_channel&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Set V/div, offset, coupling, BW limit&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;scope_set_trigger&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Configure edge trigger&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;scope_measure&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Single measurement (frequency, Vpp, rise time, …)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;scope_measure_all&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;All measurements for a channel at once&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;scope_waveform&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Download digitized waveform data&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;scope_serial_setup_uart&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Configure UART serial decode&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;scope_serial_trigger&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Trigger on UART events&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;scope_serial_read&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Read decoded serial frames&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;scope_screenshot&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Capture scope display as PNG&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;scope_state&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Full snapshot of current configuration&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Checkout the video for live demo.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Github:&lt;/strong&gt; &lt;a href="https://github.com/Netlist-Studio/scope-mcp"&gt;https://github.com/Netlist-Studio/scope-mcp&lt;/a&gt;&lt;/p&gt;</description><pubDate>Mon, 23 Feb 2026 21:10:54 +0000</pubDate><guid>http://testserver/articles/2026/02/23/claude-oscilloscope/</guid><media:content medium="image" url="https://storage.googleapis.com/netliststudio_static//img/articles/thumbs/claude_plus_scope.png"/></item><item><title>DUT Hub: Automating Hardware Testing with MicroPython</title><link>http://testserver/articles/2026/02/18/dut-hub-micropython-support/</link><description>&lt;p&gt;&lt;img src="https://storage.googleapis.com/netliststudio_static//img/articles/dut_hub_fixture.jpg" alt="DUT Hub: Automating Hardware Testing with MicroPython" style="max-width:100%;"&gt;&lt;/p&gt;&lt;p&gt;MicroPython support + a prototype test jig for semi-automatic testing&lt;/p&gt;&lt;hr&gt;&lt;h3&gt;MicroPython Support&lt;/h3&gt;
+&lt;p&gt;For this week I got MicroPython ported to the DUT Hub with the help of Claude. This makes creating and deploying test scripts much faster. It also opens up the possibility to run tests without a computer. The MicroPython test script can be uploaded to the device and run on boot. Some kind of user output is necessary for this so I'll consider adding a display output on the next revision. &lt;/p&gt;
+&lt;p&gt;Here is a sample of the test framework that runs on the computer:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-python"&gt;suite.add_test(LEDCurrentTest(
+    min_ma=0.01,
+    max_ma=0.03,
+    led_pin='P302',
+    color=(255, 255, 255)
+))
+
+class LEDCurrentTest(TestCase):
+    &amp;quot;&amp;quot;&amp;quot;Test LED current consumption&amp;quot;&amp;quot;&amp;quot;
+
+    def __init__(self, min_ma=0.01, max_ma=0.03, led_pin='P302', color=(255, 255, 255)):
+        super().__init__(
+            name=&amp;quot;LED Current Test&amp;quot;,
+            description=f&amp;quot;Turn on LED and verify current is {min_ma}-{max_ma} mA&amp;quot;
+        )
+        self.min_ma = min_ma
+        self.max_ma = max_ma
+        self.led_pin = led_pin
+        self.color = color
+
+    def run(self, dut, pico, mcu):
+        # Measure baseline
+        baseline_ma = pico.measure_current(dut.power_channel)
+
+        # Turn on LED
+        led_code = f&amp;quot;&amp;quot;&amp;quot;
+from machine import WS2812, Pin
+led = WS2812(Pin('{self.led_pin}'))
+led.set_color{self.color}
+&amp;quot;&amp;quot;&amp;quot;
+        mcu.exec_code(led_code)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The MicroPython is embedded in the LEDCurrentTest class, which turns on an RGB led and measures the current to verify functionality. The following runs on device:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-python"&gt;from machine import WS2812, Pin
+led = WS2812(Pin('{self.led_pin}'))
+led.set_color{self.color}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;The Test Fixture&lt;/h3&gt;
+&lt;p&gt;I also designed and built a simple test fixture with some spare parts I have from an ongoing CNC build. The goal was to get an idea what the end-to-end test procedure would feel like. Overall, I'm pretty happy with the outcome and would only change a few things:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Use ESD safe materials&lt;/li&gt;
+&lt;li&gt;Switch to standard 2020 aluminum extrusion since that's easier to find&lt;/li&gt;
+&lt;li&gt;Include a place, maybe underneath, to store the DUT Hub and other test electronics &lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Checkout the video for live demo.&lt;/p&gt;</description><pubDate>Wed, 18 Feb 2026 20:28:43 +0000</pubDate><guid>http://testserver/articles/2026/02/18/dut-hub-micropython-support/</guid><media:content medium="image" url="https://storage.googleapis.com/netliststudio_static//img/articles/thumbs/dut_hub_fixture.jpg"/></item><item><title>DUT Hub: A Prototype Test Jig Controller (V0.1)</title><link>http://testserver/articles/2026/02/12/dut-hub-prototype-test-jig-v0-1/</link><description>&lt;p&gt;&lt;img src="https://storage.googleapis.com/netliststudio_static//img/articles/dut_hub.png" alt="DUT Hub: A Prototype Test Jig Controller (V0.1)" style="max-width:100%;"&gt;&lt;/p&gt;&lt;p&gt;The DUT Hub is a 4-channel, open-source automated PCB test platform&lt;/p&gt;&lt;hr&gt;&lt;p&gt;If you’ve ever had to flash and verify a batch of PCBs by hand, you know how quickly the process becomes a bottleneck. While high-end factories use "bed of nails" fixtures that cost thousands of dollars, there isn't much of a middle ground for solo developers or small shops.&lt;/p&gt;
+&lt;p&gt;The DUT Hub (Device Under Test Hub) is my attempt to bridge that gap. It’s an open-source, 4-channel automated test solution designed to handle power control, flashing, and testing for four independent devices.&lt;/p&gt;
+&lt;h3&gt;The Hardware&lt;/h3&gt;
+&lt;p&gt;The goal for V0.1 was to keep the BOM simple while maintaining maximum flexibility for different logic levels.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The Controller:&lt;/strong&gt; I’m using a Raspberry Pi Pico as the primary interface. By taking advantage of its ability to expose multiple USB endpoints, I was able to create five independent serial ports. One for general control and one for each device under test. This approach allowed me to skip expensive dedicated USB-to-serial chips. Have you seen how expensive FTDI chips are?&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The Tester Nodes:&lt;/strong&gt; Each channel is powered by a Renesas RA4M1. I chose this specifically for its wide input voltage range (1.8V to 5V). This allows the hub to interface with a variety of target boards without needing external level shifters.&lt;/p&gt;
+&lt;h3&gt;The Software&lt;/h3&gt;
+&lt;p&gt;A simple command line interface is used to control each DUT. I've added commands to set/get GPIOs and read ADC channels. This is where the focus of the work will be going forward. &lt;/p&gt;
+&lt;p&gt;Checkout the video for live demo.&lt;/p&gt;</description><pubDate>Thu, 12 Feb 2026 06:51:25 +0000</pubDate><guid>http://testserver/articles/2026/02/12/dut-hub-prototype-test-jig-v0-1/</guid><media:content medium="image" url="https://storage.googleapis.com/netliststudio_static//img/articles/thumbs/dut_hub.png"/></item></channel></rss>
