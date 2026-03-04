@@ -16,7 +16,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Claude + KiCad — Netlist Studio</title>
-  <meta name="description" content="After building the MCP server for the Keysight Oscilloscope, I thought it would be fun to experiment with giving Claude access to a KiCad PCB.">
+  <meta name="description" content="Claude + KiCad experiments">
   <link rel="icon" href="https://storage.googleapis.com/netliststudio_static/img/logo.png">
   <link rel="stylesheet" href="https://storage.googleapis.com/netliststudio_static/css/pico.min.css">
   <link rel="stylesheet" href="https://storage.googleapis.com/netliststudio_static/css/style.css">
@@ -58,7 +58,7 @@
     </p>
 
     
-    <p style="color:var(--text-muted); margin-top:1rem; font-size:.95rem; line-height:1.6;">After building the MCP server for the Keysight Oscilloscope, I thought it would be fun to experiment with giving Claude access to a KiCad PCB.</p>
+    <p style="color:var(--text-muted); margin-top:1rem; font-size:.95rem; line-height:1.6;">Claude + KiCad experiments</p>
     
   </div>
 
@@ -68,7 +68,8 @@
 
   
   <div class="article-body">
-    <h3>KiCad 9 API</h3>
+    <p>After building the MCP server for the Keysight Oscilloscope, I thought it would be fun to experiment with giving Claude access to a KiCad PCB.</p>
+<h3>KiCad 9 API</h3>
 <p>KiCad Version 9 introduced a new socket-based API for controlling PCB design elements. It is designed to be more stable and better supported than the legacy Python based API, with schematic control planned for future releases. For an MCP server, this is the perfect interface.</p>
 <h3>The Goal</h3>
 <p>KiCad has a rich plugin ecosystem, but I frequently encounter repetitive tasks that are too small to justify writing a dedicated script, but  too tedious to do manually.  I wanted to see if I could use a Claude prompt to handle those quick tasks like strange layout patterns or board audits that are too small to automate with a dedicated script.</p>
