@@ -1,0 +1,144 @@
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1TCCGMT9WG"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-1TCCGMT9WG');
+  </script>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MCUBin: Open Source Inventory for Makers — Netlist Studio</title>
+  <meta name="description" content="A desktop inventory system for rapid electronic part cataloging via barcode scanner.">
+  <link rel="icon" href="https://storage.googleapis.com/netliststudio_static/img/logo.png">
+  <link rel="stylesheet" href="https://storage.googleapis.com/netliststudio_static/css/pico.min.css">
+  <link rel="stylesheet" href="https://storage.googleapis.com/netliststudio_static/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="Netlist Studio" href="/feed.xml">
+</head>
+<body>
+
+<nav>
+  <div class="container nav-inner">
+    <a class="site-name" href="/">
+      <img src="https://storage.googleapis.com/netliststudio_static/img/logo.png" alt="Netlist Studio logo">
+      Netlist<span class="accent">Studio</span>
+    </a>
+    <ul>
+      <li><a href="/articles/">Articles</a></li>
+      <li><a href="/about/">About</a></li>
+      <li><a href="https://www.youtube.com/@netliststudio" target="_blank" rel="noopener">YouTube</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+  
+<div class="container">
+
+  <div class="article-header">
+    
+    <div class="tags">
+      
+      <span class="tag"><a href="/articles/tag/software/">software</a></span>
+      
+    </div>
+    
+
+    <h1>MCUBin: Open Source Inventory for Makers</h1>
+    <p class="article-meta">
+      2026-03-08
+      &nbsp;·&nbsp;<a href="https://youtu.be/hxWWe0mMIN8" target="_blank" rel="noopener">Watch on YouTube ↗</a>
+    </p>
+
+    
+    <p style="color:var(--text-muted); margin-top:1rem; font-size:.95rem; line-height:1.6;">A desktop inventory system for rapid electronic part cataloging via barcode scanner.</p>
+    
+  </div>
+
+  
+  <img class="article-main-image" src="https://storage.googleapis.com/netliststudio_static/img/articles/mcubin_main_image.png" alt="MCUBin: Open Source Inventory for Makers">
+  
+
+  
+  <div class="article-body">
+    <h3>The Problem</h3>
+<p>About once a year, I get so frustrated with the mountain of DigiKey bags swallowing my lab that I dedicate an entire day to nothing but cleaning up. Last year’s effort involved buying about 20 clear <a href="https://www.ikea.com/ca/en/p/samla-box-with-lid-transparent-s69440836/">Ikea SAMLA boxes</a> and 50 ESD-safe bins, which worked well. The challenge this year, however, is keeping track of stock, especially with multiple internal and external projects running simultaneously.</p>
+<p>There is no shortage of free and paid apps out there, but I was disappointed with most of what I saw. Everything has moved to web based tools that require spinning up Docker images or dealing with a dependency nightmare.</p>
+<p>The other issue is ease of use. Most tools don't seem to prioritize data entry, which is a major hurdle when you have hundreds of parts. While this is primarily a first-time setup problem, it’s still a pain. So, I decided to build my own while experimenting with agentic coding.</p>
+<h3>AI Coding</h3>
+<p>Part of the promise of Gen AI is the ability for everyone to have their own highly customized software. I had Claude generate a detailed prompt that boiled down to:</p>
+<ul>
+<li><strong>Desktop app:</strong> Python + Qt + SQLite</li>
+<li><strong>Minimal Interaction:</strong> Limited keyboard or mouse input for part entry</li>
+<li><strong>Hardware Optimized:</strong> Built for barcode scanners and Zebra ZP 450 label printers</li>
+<li><strong>Smart Entry:</strong> Details should be auto-filled using distributor APIs</li>
+</ul>
+<p>My first attempt at one-shotting the app produced a functional tool, but it required several UX changes, so I decided to iterate step-by-step. 5,000 lines of code, 23 commits, and 2 days later, I had an app I was happy with.</p>
+<h3>MCUBin: Simple Open Source Inventory</h3>
+<p>The result is a lightweight app with a clean, table-based UI.</p>
+<p><img alt="mcubin Parts Screen" src="https://storage.googleapis.com/netliststudio_static/img/articles/mcubin_parts_screen.png" /></p>
+<p>The "Add Part" dialog puts the most important fields at the top. Since Mouser static bags include these fields as barcodes, and each scan sends a newline, the focus automatically moves to the next text box. Once the quantity is entered, a part lookup is performed, and the entry can be saved instantly.</p>
+<p><img alt="mcubin Add Part Screen" src="https://storage.googleapis.com/netliststudio_static/img/articles/mcubin_add_part_screen.png" /></p>
+<p>Things went so well with Claude that I decided to build a label editor too. Every field can be customized and the layout can be saved as a template.</p>
+<p><img alt="mcubin Label Screen" src="https://storage.googleapis.com/netliststudio_static/img/articles/mcubin_label_screen.png" /></p>
+<h3>Conclusion</h3>
+<p>It’s extremely satisfying to create custom tools that I simply wouldn't have had the time to build without AI. Claude was able to implement features with minimal guidance, and the more I refined my requests, the better the results became. It's scary to think where we'll be in 1 year.</p>
+<p>However, there are downsides. It’s very easy to introduce bugs as the app grows in complexity. I also don’t have a good understanding of the overall architecture since I didn’t write the code myself. This is fine for internal tools, but I wouldn’t ship a commercial product built entirely this way.</p>
+<h3>The Code</h3>
+<p>Give it a try if you're interested.</p>
+<p><strong>GitHub Repository:</strong> <a href="https://github.com/Netlist-Studio/mcubin">Netlist-Studio/mcubin</a></p>
+  </div>
+  
+
+  
+  <div class="youtube-embed">
+    <iframe
+      src="https://www.youtube.com/embed/hxWWe0mMIN8"
+      title="MCUBin: Open Source Inventory for Makers"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen>
+    </iframe>
+  </div>
+  
+
+  <div style="margin-top:3rem; padding-top:1.5rem; border-top:1px solid var(--border);">
+    <a href="/articles/" style="color:var(--text-muted); font-size:.85rem;">← All articles</a>
+  </div>
+
+</div>
+
+</main>
+
+<footer>
+  <div class="container" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.5rem;">
+    <span>&copy; 2026 Netlist Studio</span>
+    <span style="display:inline-flex; align-items:center; gap:.75rem;">
+      <span class="social-icons">
+        <a href="https://www.youtube.com/@netliststudio" target="_blank" rel="noopener" title="YouTube">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5a3 3 0 0 0-2.1 2.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.5 15.5v-7l6.3 3.5-6.3 3.5z"/></svg>
+        </a>
+        <a href="https://x.com/netliststudio" target="_blank" rel="noopener" title="X (Twitter)">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <a href="https://www.reddit.com/r/NetlistStudio/" target="_blank" rel="noopener" title="Reddit">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
+        </a>
+        <a href="/feed.xml" title="RSS Feed">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.18 15.64a2.18 2.18 0 0 1 2.18 2.18C8.36 19.01 7.38 20 6.18 20C4.98 20 4 19.01 4 17.82a2.18 2.18 0 0 1 2.18-2.18M4 4.44A15.56 15.56 0 0 1 19.56 20h-2.83A12.73 12.73 0 0 0 4 7.27V4.44m0 5.66a9.9 9.9 0 0 1 9.9 9.9h-2.83A7.07 7.07 0 0 0 4 12.93V10.1z"/></svg>
+        </a>
+      </span>
+      &nbsp;·&nbsp;
+      <a href="/sitemap.xml">Sitemap</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>
