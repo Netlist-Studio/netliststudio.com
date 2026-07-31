@@ -15,14 +15,14 @@
 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>MCUBin: Open Source Inventory for Makers — Netlist Studio</title>
-  <meta name="description" content="A desktop inventory system for rapid electronic part cataloging via barcode scanner.">
+  <title>Pick and Place: Pros and Cons — Netlist Studio</title>
+  <meta name="description" content="Should you buy a pick-and-place machine? Weighing it against overseas and local assembly.">
   <meta property="og:site_name" content="Netlist Studio">
   <meta property="og:type" content="article">
-  <meta property="og:url" content="https://netliststudio.com/articles/2026/03/08/mcubin-open-source-inventory/">
-  <meta property="og:title" content="MCUBin: Open Source Inventory for Makers — Netlist Studio">
-  <meta property="og:description" content="A desktop inventory system for rapid electronic part cataloging via barcode scanner.">
-  <meta property="og:image" content="https://netliststudio.comhttps://storage.googleapis.com/netliststudio_static/img/articles/mcubin_main_image.png">
+  <meta property="og:url" content="https://netliststudio.com/articles/2026/07/30/pick-and-place-pros-and-cons/">
+  <meta property="og:title" content="Pick and Place: Pros and Cons — Netlist Studio">
+  <meta property="og:description" content="Should you buy a pick-and-place machine? Weighing it against overseas and local assembly.">
+  <meta property="og:image" content="https://netliststudio.comhttps://storage.googleapis.com/netliststudio_static/img/articles/pick_and_place.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="https://storage.googleapis.com/netliststudio_static/img/logo.png">
   <link rel="stylesheet" href="https://storage.googleapis.com/netliststudio_static/css/pico.min.css">
@@ -54,62 +54,54 @@
     
     <div class="tags">
       
-      <span class="tag"><a href="/articles/tag/software/">software</a></span>
+      <span class="tag"><a href="/articles/tag/electronics/">electronics</a></span>
+      
+      <span class="tag"><a href="/articles/tag/tools/">tools</a></span>
       
     </div>
     
 
-    <h1>MCUBin: Open Source Inventory for Makers</h1>
+    <h1>Pick and Place: Pros and Cons</h1>
     <p class="article-meta">
-      2026-03-08
-      &nbsp;·&nbsp;<a href="https://youtu.be/hxWWe0mMIN8" target="_blank" rel="noopener">Watch on YouTube ↗</a>
+      2026-07-30
+      &nbsp;·&nbsp;<a href="https://www.youtube.com/shorts/pBb8OlX3uuk" target="_blank" rel="noopener">Watch on YouTube ↗</a>
     </p>
 
     
-    <p style="color:var(--text-muted); margin-top:1rem; font-size:.95rem; line-height:1.6;">A desktop inventory system for rapid electronic part cataloging via barcode scanner.</p>
+    <p style="color:var(--text-muted); margin-top:1rem; font-size:.95rem; line-height:1.6;">Should you buy a pick-and-place machine? Weighing it against overseas and local assembly.</p>
     
   </div>
 
   
-  <img class="article-main-image" src="https://storage.googleapis.com/netliststudio_static/img/articles/mcubin_main_image.png" alt="MCUBin: Open Source Inventory for Makers">
+  <img class="article-main-image" src="https://storage.googleapis.com/netliststudio_static/img/articles/pick_and_place.jpg" alt="Pick and Place: Pros and Cons">
   
 
   
   <div class="article-body">
-    <h3>The Problem</h3>
-<p>About once a year, I get so frustrated with the mountain of DigiKey bags swallowing my lab that I dedicate an entire day to nothing but cleaning up. Last year’s effort involved buying about 20 clear <a href="https://www.ikea.com/ca/en/p/samla-box-with-lid-transparent-s69440836/">Ikea SAMLA boxes</a> and 50 ESD-safe bins, which worked well. The challenge this year, however, is keeping track of stock, especially with multiple internal and external projects running simultaneously.</p>
-<p>There is no shortage of free and paid apps out there, but I was disappointed with most of what I saw. Everything has moved to web based tools that require spinning up Docker images or dealing with a dependency nightmare.</p>
-<p>The other issue is ease of use. Most tools don't seem to prioritize data entry, which is a major hurdle when you have hundreds of parts. While this is primarily a first-time setup problem, it’s still a pain. So, I decided to build my own while experimenting with agentic coding.</p>
-<h3>AI Coding</h3>
-<p>Part of the promise of Gen AI is the ability for everyone to have their own highly customized software. I had Claude generate a detailed prompt that boiled down to:</p>
-<ul>
-<li><strong>Desktop app:</strong> Python + Qt + SQLite</li>
-<li><strong>Minimal Interaction:</strong> Limited keyboard or mouse input for part entry</li>
-<li><strong>Hardware Optimized:</strong> Built for barcode scanners and Zebra ZP 450 label printers</li>
-<li><strong>Smart Entry:</strong> Details should be auto-filled using distributor APIs</li>
-</ul>
-<p>My first attempt at one-shotting the app produced a functional tool, but it required several UX changes, so I decided to iterate step-by-step. 5,000 lines of code, 23 commits, and 2 days later, I had an app I was happy with.</p>
-<h3>MCUBin: Simple Open Source Inventory</h3>
-<p>The result is a lightweight app with a clean, table-based UI.</p>
-<p><img loading="lazy" alt="mcubin Parts Screen" src="https://storage.googleapis.com/netliststudio_static/img/articles/mcubin_parts_screen.png" /></p>
-<p>The "Add Part" dialog puts the most important fields at the top. Since Mouser static bags include these fields as barcodes, and each scan sends a newline, the focus automatically moves to the next text box. Once the quantity is entered, a part lookup is performed, and the entry can be saved instantly.</p>
-<p><img loading="lazy" alt="mcubin Add Part Screen" src="https://storage.googleapis.com/netliststudio_static/img/articles/mcubin_add_part_screen.png" /></p>
-<p>Things went so well with Claude that I decided to build a label editor too. Every field can be customized and the layout can be saved as a template.</p>
-<p><img loading="lazy" alt="mcubin Label Screen" src="https://storage.googleapis.com/netliststudio_static/img/articles/mcubin_label_screen.png" /></p>
-<h3>Conclusion</h3>
-<p>It’s extremely satisfying to create custom tools that I simply wouldn't have had the time to build without AI. Claude was able to implement features with minimal guidance, and the more I refined my requests, the better the results became. It's scary to think where we'll be in 1 year.</p>
-<p>However, there are downsides. It’s very easy to introduce bugs as the app grows in complexity. I also don’t have a good understanding of the overall architecture since I didn’t write the code myself. This is fine for internal tools, but I wouldn’t ship a commercial product built entirely this way.</p>
-<h3>The Code</h3>
-<p>Give it a try if you're interested.</p>
-<p><strong>GitHub Repository:</strong> <a href="https://github.com/Netlist-Studio/mcubin">Netlist-Studio/mcubin</a></p>
+    <p>Should you buy a pick and place machine? Let's take a look at the various PCB assembly options to find out.</p>
+<h3>Overseas Assembly</h3>
+<p>Chinese assembly can be fast if they have the parts in stock. If they have to order from a distributor, tack on an extra week at least.</p>
+<p>Another problem is cost. A chip that costs 8 cents to buy can cost 40 cents for them to assemble, a 5x markup that also inflates your import tariffs. If you're building 100 boards, that's real money. Here's a real example, pulled from LCSC:</p>
+<p><img loading="lazy" alt="LCSC pricing for a part costing $0.08, with an extended price of $0.4" src="https://storage.googleapis.com/netliststudio_static/img/articles/lcsc_part_markup.png" /></p>
+<p>Finally, counterfeit parts are always a risk when working with unknown suppliers overseas.</p>
+<h3>Local Assembly</h3>
+<p>Local shops are great for quality, but setup fees can be high for low volume prototypes. Most shops will charge $1,000 just to load the feeders, because they only make money with volume. This adds up fast if you're prototyping often.</p>
+<h3>DIY: Buying Your Own Machine</h3>
+<p>The last option is having a pick-and-place machine in the lab. In my case, I purchased a used Charmhigh T530P for $2,500 CAD (plus another $1,500 or so on Yamaha feeders), which was a great deal. It paid for itself in less than a few months compared to local assembly costs.</p>
+<p>The Charmhigh T530P is a two-head pneumatic machine with vision, and uses pneumatic feeders to advance the parts. This makes the feeders much less expensive when compared to their electronic counterparts, but they require a bit of tuning since they have more moving parts. Another downside is the setup time is now your responsibility. For small runs, the setup often takes longer than the actual assembly.</p>
+<p><img loading="lazy" alt="A Yamaha SMT feeder loaded with a component tape reel" src="https://storage.googleapis.com/netliststudio_static/img/articles/yamaha_feeder.jpg" /><br />
+<em class="img-caption">A Yamaha pneumatic feeder</em></p>
+<p>To actually produce a board, you also need to invest in and find space for a stencil machine, reflow oven, a high-quality optical microscope, and a solder station.</p>
+<h3>Is It Worth It?</h3>
+<p>If you build a lot of small-batch prototypes with non-standard parts and need a quick turnaround, I think so. Then at some point you can transition to local assembly.</p>
   </div>
   
 
   
   <div class="youtube-embed">
     <iframe
-      src="https://www.youtube.com/embed/hxWWe0mMIN8"
-      title="MCUBin: Open Source Inventory for Makers"
+      src="https://www.youtube.com/embed/pBb8OlX3uuk"
+      title="Pick and Place: Pros and Cons"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowfullscreen>
     </iframe>
@@ -131,11 +123,11 @@
 {
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "MCUBin: Open Source Inventory for Makers",
-  "description": "A desktop inventory system for rapid electronic part cataloging via barcode scanner.",
-  "image": ["https://netliststudio.comhttps://storage.googleapis.com/netliststudio_static/img/articles/mcubin_main_image.png"],
-  "datePublished": "2026-03-08T23:07:33+00:00",
-  "url": "https://netliststudio.com/articles/2026/03/08/mcubin-open-source-inventory/",
+  "headline": "Pick and Place: Pros and Cons",
+  "description": "Should you buy a pick\u002Dand\u002Dplace machine? Weighing it against overseas and local assembly.",
+  "image": ["https://netliststudio.comhttps://storage.googleapis.com/netliststudio_static/img/articles/pick_and_place.jpg"],
+  "datePublished": "2026-07-30T21:09:54+00:00",
+  "url": "https://netliststudio.com/articles/2026/07/30/pick-and-place-pros-and-cons/",
   "author": {"@type": "Organization", "name": "Netlist Studio", "url": "https://netliststudio.com"},
   "publisher": {
     "@type": "Organization",
